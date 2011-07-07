@@ -132,6 +132,7 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 
 	@Override
 	public void execute() {
+		// Messages are processed in this, so all that is done first !
 		super.execute();
 		
 		logger.info("My location is: "+ this.getLocation());
