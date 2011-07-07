@@ -34,6 +34,10 @@ import uk.ac.imperial.presage2.util.participant.HasPerceptionRange;
 public class HelloAgent extends AbstractParticipant implements HasLocation, HasPerceptionRange, HasCommunicationRange {
 	
 	class DataStore {
+		/**
+		 * LinkedHashMap to keep track of all the agents known.
+		 * Keyed by NetworkAddress.getId()
+		 */
 		LinkedHashMap<UUID,AgentIDTriple> knownAgents;
 		
 		/**
@@ -42,6 +46,12 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 		 * So that the agent knows when it should update other people if it changes.
 		 */
 		AgentIDTriple myAgentIDTriple;
+		
+		/**
+		 * Agent id info for the agent that this agent is following.
+		 * Should be set to myAgentIDTriple if this agent is the leader.
+		 */
+		AgentIDTriple leader;
 	}
 	
 	class EnvironmentState {
