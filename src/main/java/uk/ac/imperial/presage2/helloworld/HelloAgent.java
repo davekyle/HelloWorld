@@ -235,7 +235,6 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 		if (!this.dataStore.knownAgents.containsKey(uuid)) {
 			dataStore.knownAgents.put(uuid, new AgentIDTriple(uuid, name, addr));
 		}
-		//random commment
 		else {
 			dataStore.knownAgents.get(uuid).update(uuid, name, addr);
 		}
