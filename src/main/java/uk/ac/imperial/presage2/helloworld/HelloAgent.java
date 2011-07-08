@@ -3,13 +3,14 @@
  */
 package uk.ac.imperial.presage2.helloworld;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
-import dws04.utils.presage2.AgentIDTriple;
+import dws04.utils.presage2.contactCards.AgentIDTriple;
 
 import uk.ac.imperial.presage2.core.environment.ActionHandlingException;
 import uk.ac.imperial.presage2.core.environment.ParticipantSharedState;
@@ -22,7 +23,6 @@ import uk.ac.imperial.presage2.util.environment.CommunicationRangeService;
 import uk.ac.imperial.presage2.util.location.Discrete2DLocation;
 import uk.ac.imperial.presage2.util.location.HasLocation;
 import uk.ac.imperial.presage2.util.location.Location;
-import uk.ac.imperial.presage2.util.location.Location2D;
 import uk.ac.imperial.presage2.util.location.Move2D;
 import uk.ac.imperial.presage2.util.location.ParticipantLocationService;
 import uk.ac.imperial.presage2.util.participant.AbstractParticipant;
@@ -68,7 +68,7 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 		
 	}
 	
-	private DataStore dataStore = new DataStore();
+	protected DataStore dataStore = new DataStore();
 	
 	private EnvironmentState environmentState = new EnvironmentState();
 	
@@ -155,9 +155,9 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 		doMove();
 		
 	}
-	
+
 	/**
-	 * Attempt to make a move action. Will be random.
+	 * Attempt to make a move action. Randomness depends on state of agent
 	 */
 	protected void doMove(){
 		if (this.dataStore.fsm.getState().equals(HelloAgentState.MOVE_RAND)) {

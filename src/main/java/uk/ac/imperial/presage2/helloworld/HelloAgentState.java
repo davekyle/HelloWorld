@@ -3,7 +3,7 @@
  */
 package uk.ac.imperial.presage2.helloworld;
 
-import dws04.utils.presage2.AgentIDTriple;
+import dws04.utils.presage2.contactCards.AgentIDTriple;
 import dws04.utils.presage2.fsm.IsFSMState;
 import uk.ac.imperial.presage2.core.messaging.Input;
 import uk.ac.imperial.presage2.core.messaging.Performative;
@@ -20,15 +20,19 @@ public enum HelloAgentState implements IsFSMState {
 		 * If you become the leader, switch to BE_THE_LEADER.
 		 * If you find a leader, switch to FOLLOW_THE_LEADER.
 		 */
-		@Override
+		/*@Override
 		public HelloAgentState next(Input input) {
 			if (input instanceof NewLeaderMessage) {
 				if (((NewLeaderMessage)input).getPerformative().equals(Performative.REQUEST)) {
-					// TODO decide on new leader
+					// TODO not implemented atm. You don't get to decide.
+					return MOVE_RAND;
 				}
 				else if (((NewLeaderMessage)input).getPerformative().equals(Performative.INFORM)) {
 					if (((NewLeaderMessage)input).getLeader().equals(getMyAgentIDTriple())) {
 						return BE_THE_LEADER;
+					}
+					else if (((NewLeaderMessage)input).getLeader().equals(null)) {
+						return MOVE_RAND;
 					}
 					else {
 						return FOLLOW_THE_LEADER;
@@ -36,7 +40,7 @@ public enum HelloAgentState implements IsFSMState {
 				}
 			}
 			return null;
-		}
+		}*/
 
 		@Override
 		public boolean canHandle(Input in) {
@@ -69,16 +73,16 @@ public enum HelloAgentState implements IsFSMState {
 		/**
 		 * If someone else becomes leader, switch to FOLLOW_THE_LEADER
 		 */
-		@Override
+		/*@Override
 		public HelloAgentState next(Input input) {
 			// TODO Auto-generated method stub
 			return null;
-		}
+		}*/
 
 		@Override
 		public boolean canHandle(Input in) {
-			// TODO Auto-generated method stub
-			return false;
+			if (in instanceof NewLeaderMessage) return true;
+			else return false;
 		}
 	},
 	FOLLOW_THE_LEADER {
@@ -86,22 +90,45 @@ public enum HelloAgentState implements IsFSMState {
 		/**
 		 * If you become the leader, switch to BE_THE_LEADER
 		 */
-		@Override
+		/*@Override
 		public HelloAgentState next(Input input) {
 			// TODO Auto-generated method stub
 			return null;
-		}
+		}*/
 
 		@Override
 		public boolean canHandle(Input in) {
-			// TODO Auto-generated method stub
-			return false;
+			if (in instanceof NewLeaderMessage) return true;
+			else return false;
 		}
 	};
 
 	private AgentIDTriple myAgentIDTriple;
 	
-	abstract public HelloAgentState next(Input input);
+	//abstract public HelloAgentState next(Input input);
+	public HelloAgentState next(Input input) {
+		if (input instanceof NewLeaderMessage) {
+			if (((NewLeaderMessage)input).getPerformative().equals(Performative.REQUEST)) {
+				// TODO not implemented atm. You don't get to decide.
+				return MOVE_RAND;
+			}
+			else if (((NewLeaderMessage)input).getPerformative().equals(Performative.INFORM)) {
+				if (((NewLeaderMessage)input).getLeader().equals(getMyAgentIDTriple())) {
+					return BE_THE_LEADER;
+				}
+				else if (((NewLeaderMessage)input).getLeader() == null) {
+					return MOVE_RAND;
+				}
+				else {
+					return FOLLOW_THE_LEADER;
+				}
+			}
+		}
+		// If you get here...
+		return null;
+	}
+	
+	
 
 	abstract public boolean canHandle(Input in);
 

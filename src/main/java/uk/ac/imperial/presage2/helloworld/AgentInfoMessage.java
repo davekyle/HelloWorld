@@ -3,7 +3,7 @@
  */
 package uk.ac.imperial.presage2.helloworld;
 
-import dws04.utils.presage2.AgentIDTriple;
+import dws04.utils.presage2.contactCards.AgentIDTriple;
 import uk.ac.imperial.presage2.core.Time;
 import uk.ac.imperial.presage2.core.messaging.Performative;
 import uk.ac.imperial.presage2.core.network.NetworkAddress;

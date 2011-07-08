@@ -4,7 +4,7 @@
 package uk.ac.imperial.presage2.helloworld;
 
 import uk.ac.imperial.presage2.core.messaging.Input;
-import dws04.utils.presage2.AgentIDTriple;
+import dws04.utils.presage2.contactCards.AgentIDTriple;
 import dws04.utils.presage2.fsm.AbstractFSM;
 import dws04.utils.presage2.fsm.IsFSMState;
 
@@ -40,7 +40,7 @@ public class HelloAgentFSM extends AbstractFSM {
 			}
 			else if (state.equals(HelloAgentState.MOVE_RAND)){
 				logger.info("I'm moving randomly !");
-				this.setLeader(getMyIDTriple());
+				this.setLeader(null);
 			}
 		}
 	}
