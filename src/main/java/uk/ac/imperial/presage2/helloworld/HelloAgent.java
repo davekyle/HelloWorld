@@ -19,8 +19,10 @@ import uk.ac.imperial.presage2.core.messaging.Performative;
 import uk.ac.imperial.presage2.core.network.NetworkAddress;
 import uk.ac.imperial.presage2.core.util.random.Random;
 import uk.ac.imperial.presage2.util.environment.CommunicationRangeService;
+import uk.ac.imperial.presage2.util.location.Discrete2DLocation;
 import uk.ac.imperial.presage2.util.location.HasLocation;
 import uk.ac.imperial.presage2.util.location.Location;
+import uk.ac.imperial.presage2.util.location.Location2D;
 import uk.ac.imperial.presage2.util.location.Move2D;
 import uk.ac.imperial.presage2.util.location.ParticipantLocationService;
 import uk.ac.imperial.presage2.util.participant.AbstractParticipant;
@@ -52,6 +54,8 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 		 * Should be set to myAgentIDTriple if this agent is the leader.
 		 */
 		AgentIDTriple leader;
+		
+		HelloAgentFSM fsm;
 	}
 	
 	class EnvironmentState {
@@ -91,6 +95,7 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 		}
 		// Agent should now know its NetworkAddress
 		dataStore.myAgentIDTriple.setAddr(this.network.getAddress());
+		dataStore.fsm = new HelloAgentFSM(dataStore.myAgentIDTriple);
 	}
 
 	public double getCommunicationRange() {
@@ -116,6 +121,9 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 		}
 		else if (in instanceof AgentInfoMessage) {
 			handleAgentInfoMessage((AgentInfoMessage)in);
+		}
+		else if (in instanceof NewLeaderMessage) {
+			handleNewLeaderMessage((NewLeaderMessage)in);
 		}
 	}
 
@@ -152,15 +160,43 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 	 * Attempt to make a move action. Will be random.
 	 */
 	protected void doMove(){
-		// random movement
-		Move2D<Integer> move = new Move2D<Integer>(Random.randomInt(10)-5, Random.randomInt(10)-5);
-		
-		logger.info("Attempting move: "+ move);
-		
-		try {
-			environment.act(move, getID(), authkey);
-		} catch (ActionHandlingException e) {
-			logger.warn(e);
+		if (this.dataStore.fsm.getState().equals(HelloAgentState.MOVE_RAND)) {
+			// random movement
+			Move2D<Integer> move = new Move2D<Integer>(Random.randomInt(10)-5, Random.randomInt(10)-5);
+			
+			logger.info("Attempting random move: "+ move);
+			
+			try {
+				environment.act(move, getID(), authkey);
+			} catch (ActionHandlingException e) {
+				logger.warn(e);
+			}
+		}
+		else if (this.dataStore.fsm.getState().equals(HelloAgentState.BE_THE_LEADER)) {
+			// TODO random movement for the moment
+			Move2D<Integer> move = new Move2D<Integer>(Random.randomInt(10)-5, Random.randomInt(10)-5);
+			
+			logger.info("Attempting leader move: "+ move);
+			
+			try {
+				environment.act(move, getID(), authkey);
+			} catch (ActionHandlingException e) {
+				logger.warn(e);
+			}
+		}
+		else if (this.dataStore.fsm.getState().equals(HelloAgentState.FOLLOW_THE_LEADER)) {
+			//Discrete2DLocation myLoc = (Discrete2DLocation) this.getLocation();
+			//Discrete2DLocation leaderLoc = (Discrete2DLocation) this.locationService.getAgentLocation(this.dataStore.leader.getUuid());
+			// TODO random movement for the moment
+			Move2D<Integer> move = new Move2D<Integer>(Random.randomInt(10)-5, Random.randomInt(10)-5);
+			
+			logger.info("Attempting follow move: "+ move);
+			
+			try {
+				environment.act(move, getID(), authkey);
+			} catch (ActionHandlingException e) {
+				logger.warn(e);
+			}
 		}
 	}
 	
@@ -229,6 +265,10 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 			logger.info(originator.getId() + " replied to my request for AgentInfo, so I will add them to my list.");
 			addAgentInfo(msg.getContent());
 		}
+	}
+
+	private void handleNewLeaderMessage(NewLeaderMessage msg) {
+		this.dataStore.fsm.next(msg);
 	}
 	
 	private void addAgentInfo(AgentIDTriple info){

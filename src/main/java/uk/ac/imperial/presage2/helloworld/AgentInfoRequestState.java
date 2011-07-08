@@ -5,7 +5,6 @@ package uk.ac.imperial.presage2.helloworld;
 
 import uk.ac.imperial.presage2.core.messaging.Input;
 import uk.ac.imperial.presage2.core.messaging.Performative;
-import dws04.utils.presage2.fsm.FSMStateCannotHandleInputException;
 import dws04.utils.presage2.fsm.IsFSMState;
 
 /**
@@ -15,45 +14,64 @@ import dws04.utils.presage2.fsm.IsFSMState;
 public enum AgentInfoRequestState implements IsFSMState {
 	IDLE {
 		@Override
-		public IsFSMState next(Input in)
-				throws FSMStateCannotHandleInputException {
+		public IsFSMState next(Input in) {
 			if ((in instanceof AgentInfoMessage) && (((AgentInfoMessage)(in)).getPerformative().equals(Performative.REQUEST))) {
 				return SEND_INFO;
 			}
-			else throw new FSMStateCannotHandleInputException("IDLE can only handle a REQUEST");
+			else {
+				return IDLE;
+			}
+		}
+
+		@Override
+		public boolean canHandle(Input in) {
+			if ((in instanceof AgentInfoMessage) && (((AgentInfoMessage)(in)).getPerformative().equals(Performative.REQUEST))) return true;
+			else return false;
 		}
 	},
 	SEND_INFO {
 		@Override
-		public IsFSMState next(Input in)
-				throws FSMStateCannotHandleInputException {
+		public IsFSMState next(Input in) {
 			// TODO Auto-generated method stub
 			return null;
+		}
+
+		@Override
+		public boolean canHandle(Input in) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	},
 	WAIT_FOR_INFO {
 
 		@Override
-		public IsFSMState next(Input in)
-				throws FSMStateCannotHandleInputException {
+		public IsFSMState next(Input in) {
 			// TODO Auto-generated method stub
 			return null;
+		}
+
+		@Override
+		public boolean canHandle(Input in) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	},
 	END {
 		@Override
-		public IsFSMState next(Input in)
-				throws FSMStateCannotHandleInputException {
+		public IsFSMState next(Input in) {
 			// TODO Auto-generated method stub
 			return null;
 		}
+
+		@Override
+		public boolean canHandle(Input in) {
+			// TODO Auto-generated method stub
+			return false;
+		}
 	};
 
-	abstract public IsFSMState next(Input in) throws FSMStateCannotHandleInputException;
+	abstract public IsFSMState next(Input in);
 
-	public boolean canHandle(Input in) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	abstract public boolean canHandle(Input in);
 	
 }
