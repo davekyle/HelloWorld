@@ -44,7 +44,7 @@ public class CoordinatorAgent extends HelloAgent {
 		AgentIDTriple myAgentIDTriple;
 		AgentIDTriple currentLeader;
 	}
-	protected DataStore dataStore;
+	protected DataStore dataStore = new DataStore();
 	
 /*	class EnvironmentState {
 		
@@ -88,7 +88,12 @@ public class CoordinatorAgent extends HelloAgent {
 	public void execute() {
 		// Messages are processed in this, so all that is done first !
 		super.execute();
+		getConnectedNodes();
 		chooseLeader();
+	}
+	
+	protected void getConnectedNodes(){
+		// convert the result of this.network.getConnectedNodes(); to a linkedlist
 	}
 	
 	/**

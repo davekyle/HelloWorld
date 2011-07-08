@@ -241,12 +241,17 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 
 	protected void handleHelloMessage(HelloMessage msg) {
 		NetworkAddress originator = msg.getFrom();
-		String string = originator.getId() + " sent me a HelloMessage, ";
+		String string;
 		if (dataStore.knownAgents.containsKey(originator.getId())) {
-			string = string + "and I already know them.";
+			if (dataStore.knownAgents.get(originator.getId()).getName() == null) {
+				string = originator.getId().toString() + " sent me a HelloMessage, and I'm waiting for their information";
+			}
+			else {
+				string = dataStore.knownAgents.get(originator.getId()).getName() + " sent me a HelloMessage, and I already know them.";
+			}
 		}
 		else {
-			string = string + "and I haven't met them before, so I'll add them to my list and ask them for more info.";
+			string = originator.getId() + " sent me a HelloMessage, and I haven't met them before, so I'll add them to my list and ask them for more info.";
 			dataStore.knownAgents.put(originator.getId(), new AgentIDTriple(null, null, originator));
 			sendAgentInfoMsgRequest(originator);
 		}
