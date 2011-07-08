@@ -1,5 +1,8 @@
 package uk.ac.imperial.presage2.helloworld;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import uk.ac.imperial.presage2.core.environment.ActionHandler;
 import uk.ac.imperial.presage2.core.environment.EnvironmentConnector;
 import uk.ac.imperial.presage2.core.environment.EnvironmentService;
@@ -18,6 +21,7 @@ import uk.ac.imperial.presage2.util.location.AreaService;
 import uk.ac.imperial.presage2.util.location.HasArea;
 import uk.ac.imperial.presage2.util.location.LocationService;
 import uk.ac.imperial.presage2.util.location.MoveHandler;
+import uk.ac.imperial.presage2.util.network.NetworkModule;
 import uk.ac.imperial.presage2.util.network.NetworkRangeConstraint;
 
 import com.google.inject.AbstractModule;
@@ -50,12 +54,15 @@ public class HelloModule extends AbstractModule {
 		actionBinder.addBinding().to(MoveHandler.class);
 
 		// network
-		install(new FactoryModuleBuilder().implement(NetworkConnector.class,
+		/*install(new FactoryModuleBuilder().implement(NetworkConnector.class,
 				BasicNetworkConnector.class).build(
 				NetworkConnectorFactory.class));
 		bind(NetworkChannel.class).to(ConstrainedNetworkController.class).in(
 				Singleton.class);
-		install(new FactoryModuleBuilder().build(NetworkAddressFactory.class));
+		install(new FactoryModuleBuilder().build(NetworkAddressFactory.class));*/
+		Set<Class<? extends NetworkConstraint>>  constaints = new HashSet<Class<?  extends NetworkConstraint>>();
+		constaints.add(NetworkRangeConstraint.class);
+		install(NetworkModule.constrainedNetworkModule(constaints).withNodeDiscovery());
 
 		// network constraints
 		Multibinder<NetworkConstraint> constraintBinder = Multibinder
