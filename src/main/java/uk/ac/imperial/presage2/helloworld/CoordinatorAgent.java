@@ -4,7 +4,9 @@
 package uk.ac.imperial.presage2.helloworld;
 
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.UUID;
+import java.util.Map.Entry;
 
 import dws04.utils.presage2.contactCards.AgentIDTriple;
 import dws04.utils.presage2.contactCards.AgentIDTripleListToNetworkAddressList;
@@ -76,6 +78,14 @@ public class CoordinatorAgent extends HelloAgent {
 		super.execute();
 		findConnectedNodes();
 		chooseLeader();
+	}
+	
+	@Override
+	protected void outputKnownAgents() {
+		logger.info("I know the following agents:");
+		for (AgentIDTriple agent : this.dataStore.knownAgents ) {
+			logger.info("\t " + agent);
+		}
 	}
 	
 	protected void findConnectedNodes(){
@@ -154,6 +164,7 @@ public class CoordinatorAgent extends HelloAgent {
 		for (AgentIDTriple agent : this.dataStore.knownAgents) {
 			if (agent.getAddr().equals(addr)) {
 				result = true;
+				break;
 			}
 			else {
 				// do nothing

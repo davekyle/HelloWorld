@@ -70,7 +70,7 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 	
 	private EnvironmentState environmentState = new EnvironmentState();
 	
-	private ParticipantLocationService locationService;
+	protected ParticipantLocationService locationService;
 	
 	public HelloAgent(UUID id, String name, Location loc, double perceptionRange, double communicationRange) {
 		super(id, name);

@@ -30,6 +30,8 @@ public class HelloAgentFSM extends AbstractFSM {
 	@Override
 	public void onEnterState(IsFSMState state, Input in) {
 		if (in instanceof NewLeaderMessage) {
+			// Propagate this to other states. FIXME Must be a better way (make states classes, not enum...?)
+			((HelloAgentState)this.getState()).setMyAgentIDTriple(myIDTriple);
 			if (state.equals(HelloAgentState.FOLLOW_THE_LEADER)) {
 				this.setLeader(((NewLeaderMessage)in).getLeader());
 				logger.info("I'm following " + this.getLeader());
