@@ -3,30 +3,19 @@
  */
 package uk.ac.imperial.presage2.helloworld;
 
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.ListIterator;
-import java.util.Set;
 import java.util.UUID;
 
 import dws04.utils.presage2.contactCards.AgentIDTriple;
 import dws04.utils.presage2.contactCards.AgentIDTripleListToNetworkAddressList;
 
-import uk.ac.imperial.presage2.core.Time;
 import uk.ac.imperial.presage2.core.environment.ActionHandlingException;
-import uk.ac.imperial.presage2.core.environment.EnvironmentConnector;
-import uk.ac.imperial.presage2.core.environment.ParticipantSharedState;
-import uk.ac.imperial.presage2.core.environment.UnavailableServiceException;
 import uk.ac.imperial.presage2.core.messaging.Input;
 import uk.ac.imperial.presage2.core.messaging.Performative;
-import uk.ac.imperial.presage2.core.network.NetworkAdaptor;
+import uk.ac.imperial.presage2.core.network.NetworkAddress;
 import uk.ac.imperial.presage2.core.util.random.Random;
-import uk.ac.imperial.presage2.helloworld.HelloAgent.EnvironmentState;
-import uk.ac.imperial.presage2.util.environment.CommunicationRangeService;
-import uk.ac.imperial.presage2.util.location.HasLocation;
 import uk.ac.imperial.presage2.util.location.Location;
 import uk.ac.imperial.presage2.util.location.Move2D;
-import uk.ac.imperial.presage2.util.location.ParticipantLocationService;
 
 /**
  * @author dws04
@@ -35,10 +24,7 @@ import uk.ac.imperial.presage2.util.location.ParticipantLocationService;
 public class CoordinatorAgent extends HelloAgent {
 
 	class DataStore {
-		/**
-		 * LinkedHashMap to keep track of all the agents known.
-		 * Keyed by NetworkAddress.getId()
-		 */
+
 		LinkedList<AgentIDTriple> knownAgents;
 //		Iterator<AgentIDTriple> agentIt;
 		AgentIDTriple myAgentIDTriple;
@@ -64,7 +50,7 @@ public class CoordinatorAgent extends HelloAgent {
 	protected CoordinatorAgent(UUID id, String name, Location loc, double perceptionRange, double communicationRange) {
 		super(id, name, loc, communicationRange, communicationRange);
 		dataStore.knownAgents = new LinkedList<AgentIDTriple>();
-//		dataStore.agentIt = dataStore.knownAgents.iterator();
+		dataStore.currentLeader = new AgentIDTriple();
 		dataStore.myAgentIDTriple = new AgentIDTriple(id, name, null);
 		this.counter = 0;
 	}
@@ -75,7 +61,7 @@ public class CoordinatorAgent extends HelloAgent {
 	@Override
 	protected void processInput(Input in) {
 		// TODO Auto-generated method stub
-
+		// don't process inputs like a HelloAgent
 	}
 
 	
@@ -88,12 +74,18 @@ public class CoordinatorAgent extends HelloAgent {
 	public void execute() {
 		// Messages are processed in this, so all that is done first !
 		super.execute();
-		getConnectedNodes();
+		findConnectedNodes();
 		chooseLeader();
 	}
 	
-	protected void getConnectedNodes(){
+	protected void findConnectedNodes(){
 		// convert the result of this.network.getConnectedNodes(); to a linkedlist
+		for (NetworkAddress addr : this.network.getConnectedNodes()) {
+			if (!knows(addr)) {
+				this.dataStore.knownAgents.add(new AgentIDTriple(null,null,addr));
+			}
+
+		}
 	}
 	
 	/**
@@ -154,6 +146,20 @@ public class CoordinatorAgent extends HelloAgent {
 	private void sendLeaderMessage(AgentIDTriple newLeader) {
 		NewLeaderMessage msg = new NewLeaderMessage(Performative.INFORM, this.network.getAddress(), AgentIDTripleListToNetworkAddressList.make(dataStore.knownAgents), getTime(), newLeader);
 		this.network.sendMessage(msg);
+	}
+	
+	@Override
+	protected boolean knows(NetworkAddress addr) {
+		boolean result = false;
+		for (AgentIDTriple agent : this.dataStore.knownAgents) {
+			if (agent.getAddr().equals(addr)) {
+				result = true;
+			}
+			else {
+				// do nothing
+			}
+		}
+		return result;
 	}
 
 }

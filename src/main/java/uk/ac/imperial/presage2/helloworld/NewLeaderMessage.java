@@ -29,5 +29,9 @@ public class NewLeaderMessage extends MulticastMessage {
 	public AgentIDTriple getLeader() {
 		return this.leader;
 	}
+	
+	public String toString(){
+		return super.toString() + " leader: " + leader; 
+	}
 
 }

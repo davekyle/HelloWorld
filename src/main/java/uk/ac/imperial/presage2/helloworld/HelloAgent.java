@@ -3,7 +3,6 @@
  */
 package uk.ac.imperial.presage2.helloworld;
 
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,7 +19,6 @@ import uk.ac.imperial.presage2.core.messaging.Performative;
 import uk.ac.imperial.presage2.core.network.NetworkAddress;
 import uk.ac.imperial.presage2.core.util.random.Random;
 import uk.ac.imperial.presage2.util.environment.CommunicationRangeService;
-import uk.ac.imperial.presage2.util.location.Discrete2DLocation;
 import uk.ac.imperial.presage2.util.location.HasLocation;
 import uk.ac.imperial.presage2.util.location.Location;
 import uk.ac.imperial.presage2.util.location.Move2D;
@@ -177,7 +175,6 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 			Move2D<Integer> move = new Move2D<Integer>(Random.randomInt(10)-5, Random.randomInt(10)-5);
 			
 			logger.info("Attempting leader move: "+ move);
-			
 			try {
 				environment.act(move, getID(), authkey);
 			} catch (ActionHandlingException e) {
@@ -273,6 +270,7 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 	}
 
 	private void handleNewLeaderMessage(NewLeaderMessage msg) {
+		logger.info("I got a NewLeaderMessage: " + msg);
 		this.dataStore.fsm.next(msg);
 	}
 	
@@ -294,6 +292,10 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 		else {
 			dataStore.knownAgents.get(uuid).update(uuid, name, addr);
 		}
+	}
+	
+	protected boolean knows(NetworkAddress addr) {
+		return (this.dataStore.knownAgents.containsKey(addr.getId()));
 	}
 	
 }

@@ -113,7 +113,7 @@ public enum HelloAgentState implements IsFSMState {
 				return MOVE_RAND;
 			}
 			else if (((NewLeaderMessage)input).getPerformative().equals(Performative.INFORM)) {
-				if (((NewLeaderMessage)input).getLeader().equals(getMyAgentIDTriple())) {
+				if (((NewLeaderMessage)input).getLeader().getAddr().equals(getMyAgentIDTriple().getAddr())) {
 					return BE_THE_LEADER;
 				}
 				else if (((NewLeaderMessage)input).getLeader() == null) {
