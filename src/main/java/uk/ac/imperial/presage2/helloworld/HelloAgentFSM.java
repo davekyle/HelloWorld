@@ -32,19 +32,43 @@ public class HelloAgentFSM extends AbstractFSM {
 		if (in instanceof NewLeaderMessage) {
 			// Propagate this to other states. FIXME Must be a better way (make states classes, not enum...?)
 			((HelloAgentState)this.getState()).setMyAgentIDTriple(myIDTriple);
-			if (state.equals(HelloAgentState.FOLLOW_THE_LEADER)) {
+			if (isFollowTheLeader(state)) {
 				this.setLeader(((NewLeaderMessage)in).getLeader());
 				logger.info("I should follow " + this.getLeader());
 			}
-			else if (state.equals(HelloAgentState.BE_THE_LEADER)){
+			else if (isBeTheLeader(state)){
 				logger.info("I'm now the leader !");
 				this.setLeader(getMyIDTriple());
 			}
-			else if (state.equals(HelloAgentState.MOVE_RAND)){
+			else if (isMoveRand(state)){
 				logger.info("I'm moving randomly !");
 				this.setLeader(null);
 			}
 		}
+	}
+
+	/**
+	 * @param state
+	 * @return
+	 */
+	public static boolean isMoveRand(IsFSMState state) {
+		return state.equals(HelloAgentState.MOVE_RAND);
+	}
+
+	/**
+	 * @param state
+	 * @return
+	 */
+	public static boolean isBeTheLeader(IsFSMState state) {
+		return state.equals(HelloAgentState.BE_THE_LEADER);
+	}
+
+	/**
+	 * @param state
+	 * @return
+	 */
+	public static boolean isFollowTheLeader(IsFSMState state) {
+		return state.equals(HelloAgentState.FOLLOW_THE_LEADER);
 	}
 
 	/**

@@ -164,7 +164,8 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 	 * Attempt to make a move action. Randomness depends on state of agent
 	 */
 	protected void doMove(){
-		if (this.dataStore.fsm.getState().equals(HelloAgentState.MOVE_RAND)) {
+		//if (this.dataStore.fsm.getState().equals(HelloAgentState.MOVE_RAND)) {
+		if (HelloAgentFSM.isMoveRand(this.dataStore.fsm.getState())) {
 			// random movement
 			Move2D<Integer> move = new Move2D<Integer>(Random.randomInt(10)-5, Random.randomInt(10)-5);
 			
@@ -176,7 +177,7 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 				logger.warn(e);
 			}
 		}
-		else if (this.dataStore.fsm.getState().equals(HelloAgentState.BE_THE_LEADER)) {
+		else if (HelloAgentFSM.isBeTheLeader(this.dataStore.fsm.getState())) {
 			// TODO random movement for the moment
 			Move2D<Integer> move = new Move2D<Integer>(Random.randomInt(10)-5, Random.randomInt(10)-5);
 			
@@ -187,7 +188,7 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 				logger.warn(e);
 			}
 		}
-		else if (this.dataStore.fsm.getState().equals(HelloAgentState.FOLLOW_THE_LEADER)) {
+		else if (HelloAgentFSM.isFollowTheLeader(this.dataStore.fsm.getState())) {
 			//Discrete2DLocation myLoc = (Discrete2DLocation) this.getLocation();
 			//Discrete2DLocation leaderLoc = (Discrete2DLocation) this.locationService.getAgentLocation(this.dataStore.leader.getUuid());
 			// TODO random movement for the moment
