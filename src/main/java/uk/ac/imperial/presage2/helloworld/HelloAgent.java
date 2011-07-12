@@ -19,8 +19,10 @@ import uk.ac.imperial.presage2.core.messaging.Performative;
 import uk.ac.imperial.presage2.core.network.NetworkAddress;
 import uk.ac.imperial.presage2.core.util.random.Random;
 import uk.ac.imperial.presage2.util.environment.CommunicationRangeService;
+import uk.ac.imperial.presage2.util.location.Discrete2DLocation;
 import uk.ac.imperial.presage2.util.location.HasLocation;
 import uk.ac.imperial.presage2.util.location.Location;
+import uk.ac.imperial.presage2.util.location.Move;
 import uk.ac.imperial.presage2.util.location.Move2D;
 import uk.ac.imperial.presage2.util.location.ParticipantLocationService;
 import uk.ac.imperial.presage2.util.participant.AbstractParticipant;
@@ -59,13 +61,12 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 	class EnvironmentState {
 		
 		Location loc;
-		
+
 		double perceptionRange;
-		
+
 		double communicationRange;
-		
+
 	}
-	
 	protected DataStore dataStore = new DataStore();
 	
 	private EnvironmentState environmentState = new EnvironmentState();
@@ -81,12 +82,13 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 		// Don't yet know our NetworkAddress, but can fill in the rest
 		dataStore.myAgentIDTriple = new AgentIDTriple(id, name, null);
 	}
-	
+
 	@Override
 	public void initialise() {
 		super.initialise();
 		try {
-			this.locationService = this.getEnvironmentService(ParticipantLocationService.class);
+			this.locationService = this
+					.getEnvironmentService(ParticipantLocationService.class);
 		} catch (UnavailableServiceException e) {
 			logger.warn(e);
 			this.locationService = null;
@@ -132,7 +134,7 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 		ss.add(ParticipantLocationService.createSharedState(this.getID(), this));
 		// shared environmentState for network communication range
 		ss.add(CommunicationRangeService.createSharedState(getID(), this));
-		
+
 		return ss;
 	}
 
