@@ -34,7 +34,7 @@ public class HelloAgentFSM extends AbstractFSM {
 			((HelloAgentState)this.getState()).setMyAgentIDTriple(myIDTriple);
 			if (state.equals(HelloAgentState.FOLLOW_THE_LEADER)) {
 				this.setLeader(((NewLeaderMessage)in).getLeader());
-				logger.info("I'm following " + this.getLeader());
+				logger.info("I should follow " + this.getLeader());
 			}
 			else if (state.equals(HelloAgentState.BE_THE_LEADER)){
 				logger.info("I'm now the leader !");

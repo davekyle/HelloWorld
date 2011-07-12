@@ -3,8 +3,10 @@
  */
 package uk.ac.imperial.presage2.helloworld;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.Map.Entry;
 
@@ -12,9 +14,12 @@ import dws04.utils.presage2.contactCards.AgentIDTriple;
 import dws04.utils.presage2.contactCards.AgentIDTripleListToNetworkAddressList;
 
 import uk.ac.imperial.presage2.core.environment.ActionHandlingException;
+import uk.ac.imperial.presage2.core.environment.ParticipantSharedState;
 import uk.ac.imperial.presage2.core.messaging.Input;
 import uk.ac.imperial.presage2.core.messaging.Performative;
 import uk.ac.imperial.presage2.core.network.NetworkAddress;
+import uk.ac.imperial.presage2.core.participant.Participant;
+import uk.ac.imperial.presage2.core.simulator.Scenario;
 import uk.ac.imperial.presage2.core.util.random.Random;
 import uk.ac.imperial.presage2.util.location.Location;
 import uk.ac.imperial.presage2.util.location.Move2D;
@@ -49,12 +54,16 @@ public class CoordinatorAgent extends HelloAgent {
 
 	private int counter;
 	
-	protected CoordinatorAgent(UUID id, String name, Location loc, double perceptionRange, double communicationRange) {
+	// Hacky hacky
+	private Scenario scenario;
+	
+	protected CoordinatorAgent(UUID id, String name, Location loc, double perceptionRange, double communicationRange, Scenario scenario) {
 		super(id, name, loc, communicationRange, communicationRange);
 		dataStore.knownAgents = new LinkedList<AgentIDTriple>();
 		dataStore.currentLeader = new AgentIDTriple();
 		dataStore.myAgentIDTriple = new AgentIDTriple(id, name, null);
 		this.counter = 0;
+		this.scenario = scenario;
 	}
 
 	/* (non-Javadoc)
@@ -72,9 +81,19 @@ public class CoordinatorAgent extends HelloAgent {
 		super.initialise();
 	}
 
+	/* (non-Javadoc)
+	 * @see uk.ac.imperial.presage2.helloworld.HelloAgent#getSharedState()
+	 */
+	@Override
+	protected Set<ParticipantSharedState<?>> getSharedState() {
+		// Override this because we don't need a communication range (can talk to everyone) and don't need a location (don't exist anywhere)
+		return Collections.emptySet();
+	}
+
 	@Override
 	public void execute() {
 		// Messages are processed in this, so all that is done first !
+		// Wonder what happens when I try to move, considering I don't have a location.
 		super.execute();
 		findConnectedNodes();
 		chooseLeader();
@@ -82,22 +101,26 @@ public class CoordinatorAgent extends HelloAgent {
 	
 	@Override
 	protected void outputKnownAgents() {
-		logger.info("I know the following agents:");
+		logger.info("I know the following agents because I'm awesome:");
 		for (AgentIDTriple agent : this.dataStore.knownAgents ) {
 			logger.info("\t " + agent);
 		}
 	}
 	
 	protected void findConnectedNodes(){
-		// convert the result of this.network.getConnectedNodes(); to a linkedlist
 		for (NetworkAddress addr : this.network.getConnectedNodes()) {
 			if (!knows(addr)) {
 				this.dataStore.knownAgents.add(new AgentIDTriple(null,null,addr));
 			}
 
 		}
+		/*for (Participant agent : this.scenario.getParticipants()) {	
+			if (!knows(agent.getID())) {
+				this.dataStore.knownAgents.add(new AgentIDTriple(agent.getID(), null, )));
+			}
+		}*/
 	}
-	
+
 	/**
 	 * Make a move action, will always be random
 	 */
@@ -163,6 +186,20 @@ public class CoordinatorAgent extends HelloAgent {
 		boolean result = false;
 		for (AgentIDTriple agent : this.dataStore.knownAgents) {
 			if (agent.getAddr().equals(addr)) {
+				result = true;
+				break;
+			}
+			else {
+				// do nothing
+			}
+		}
+		return result;
+	}
+	
+	private boolean knows(UUID id) {
+		boolean result = false;
+		for (AgentIDTriple agent : this.dataStore.knownAgents) {
+			if (agent.getAddr().getId().equals(id)) {
 				result = true;
 				break;
 			}
