@@ -95,7 +95,9 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 		}
 		// Agent should now know its NetworkAddress
 		dataStore.myAgentIDTriple.setAddr(this.network.getAddress());
+		logger.info("My Infos for fsm init: " + dataStore.myAgentIDTriple + " / " + this.network.getAddress());
 		dataStore.fsm = new HelloAgentFSM(dataStore.myAgentIDTriple);
+		logger.info("Made a new fsm at : " + ((Object)dataStore.fsm).toString());
 	}
 
 	public double getCommunicationRange() {
@@ -140,6 +142,8 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 
 	@Override
 	public void execute() {
+
+		logger.info("My Infos: " + dataStore.myAgentIDTriple + " / " + this.network.getAddress());
 		// Messages are processed in this, so all that is done first !
 		super.execute();
 		
@@ -203,7 +207,13 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 	 * Send a broadcasted HelloMessage to all agents in communication range
 	 */
 	protected void broadcastHello(){
-		this.network.sendMessage(new HelloMessage(this.network.getAddress(), getTime()));
+		//this.network.sendMessage(new HelloMessage(this.network.getAddress(), getTime()));
+		for (NetworkAddress a : this.network.getConnectedNodes()) {
+			logger.info("I'm connected to: " + a);
+			// say hello
+			this.network.sendMessage(new HelloMessage(this.network
+					.getAddress(), a, getTime()));
+		}
 	}
 
 	/**
@@ -273,6 +283,7 @@ public class HelloAgent extends AbstractParticipant implements HasLocation, HasP
 
 	private void handleNewLeaderMessage(NewLeaderMessage msg) {
 		logger.info("I got a NewLeaderMessage: " + msg);
+		logger.info("My FSMState is at : " + ((Object)dataStore.fsm.getState()).toString());
 		this.dataStore.fsm.next(msg);
 	}
 	

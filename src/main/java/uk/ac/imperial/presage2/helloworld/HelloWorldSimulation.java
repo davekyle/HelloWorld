@@ -43,8 +43,11 @@ public class HelloWorldSimulation extends InjectedSimulation {
 
 	@Override
 	protected void addToScenario(Scenario s) {
+		Participant p = new CoordinatorAgent(Random.randomUUID(), "coordinatorAgent");
+		getInjector().injectMembers(p);
+		s.addParticipant(p);
 		for (int i = 0; i < agentCount; i++) {
-			Participant p = new HelloAgent(Random.randomUUID(), "helloagent"
+			/*Participant*/ p = new HelloAgent(Random.randomUUID(), "helloagent"
 					+ i, new Discrete2DLocation(Random.randomInt(xSize),
 					Random.randomInt(ySize)), 10, 10);
 			getInjector().injectMembers(p);

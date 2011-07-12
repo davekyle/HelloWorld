@@ -109,18 +109,22 @@ public enum HelloAgentState implements IsFSMState {
 	public HelloAgentState next(Input input) {
 		if (input instanceof NewLeaderMessage) {
 			if (((NewLeaderMessage)input).getPerformative().equals(Performative.REQUEST)) {
+				System.out.println("REQUEST - My id : " + getMyAgentIDTriple());
 				// TODO not implemented atm. You don't get to decide.
 				return MOVE_RAND;
 			}
 			else if (((NewLeaderMessage)input).getPerformative().equals(Performative.INFORM)) {
-				System.out.println("My id : " + getMyAgentIDTriple());
+				System.out.println("INFORM - My id : " + getMyAgentIDTriple());
 				if (((NewLeaderMessage)input).getLeader().getAddr().equals(getMyAgentIDTriple().getAddr())) {
+					System.out.println("BE_THE_LEADER - My id : " + getMyAgentIDTriple());
 					return BE_THE_LEADER;
 				}
 				else if (((NewLeaderMessage)input).getLeader() == null) {
+					System.out.println("MOVE_RAND - My id : " + getMyAgentIDTriple());
 					return MOVE_RAND;
 				}
 				else {
+					System.out.println("FOLLOW_THE_LEADER - My id : " + getMyAgentIDTriple());
 					return FOLLOW_THE_LEADER;
 				}
 			}

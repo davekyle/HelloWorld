@@ -6,6 +6,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import uk.ac.imperial.presage2.core.environment.EnvironmentRegistrationRequest;
+import uk.ac.imperial.presage2.core.environment.EnvironmentRegistrationResponse;
 import uk.ac.imperial.presage2.core.environment.EnvironmentService;
 import uk.ac.imperial.presage2.core.environment.SharedStateAccessException;
 import uk.ac.imperial.presage2.util.environment.AbstractEnvironment;
@@ -25,6 +26,16 @@ public class HelloEnvironment extends AbstractEnvironment implements HasArea {
 	public HelloEnvironment(Area simArea) {
 		super();
 		this.simArea = simArea;
+	}
+	
+	/* (non-Javadoc)
+	 * @see uk.ac.imperial.presage2.util.environment.AbstractEnvironment#register(uk.ac.imperial.presage2.core.environment.EnvironmentRegistrationRequest)
+	 */
+	@Override
+	public EnvironmentRegistrationResponse register(
+			EnvironmentRegistrationRequest request) {
+		logger.info("Registering : " + request.getParticipant().getName() + " as " + request.getParticipantID());
+		return super.register(request);
 	}
 
 	@Override
