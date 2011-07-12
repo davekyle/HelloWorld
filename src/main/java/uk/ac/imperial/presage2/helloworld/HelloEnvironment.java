@@ -25,7 +25,7 @@ public class HelloEnvironment extends AbstractEnvironment implements HasArea {
 	@Override
 	public EnvironmentRegistrationResponse register(
 			EnvironmentRegistrationRequest request) {
-		logger.debug("Registering : " + request.getParticipant().getName() + " as " + request.getParticipantID());
+		logger.info("Registering : " + request.getParticipant().getName() + " as " + request.getParticipantID());
 		return super.register(request);
 	}
 
