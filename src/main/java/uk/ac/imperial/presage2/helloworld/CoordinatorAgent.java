@@ -21,14 +21,14 @@ import uk.ac.imperial.presage2.core.network.NetworkAddress;
 import uk.ac.imperial.presage2.core.participant.Participant;
 import uk.ac.imperial.presage2.core.simulator.Scenario;
 import uk.ac.imperial.presage2.core.util.random.Random;
-import uk.ac.imperial.presage2.util.location.Location;
 import uk.ac.imperial.presage2.util.location.Move2D;
+import uk.ac.imperial.presage2.util.participant.AbstractParticipant;
 
 /**
  * @author dws04
  *
  */
-public class CoordinatorAgent extends HelloAgent {
+public class CoordinatorAgent extends AbstractParticipant {
 
 	class DataStore {
 
@@ -54,16 +54,13 @@ public class CoordinatorAgent extends HelloAgent {
 
 	private int counter;
 	
-	// Hacky hacky
-	private Scenario scenario;
-	
-	protected CoordinatorAgent(UUID id, String name, Location loc, double perceptionRange, double communicationRange, Scenario scenario) {
-		super(id, name, loc, communicationRange, communicationRange);
+	protected CoordinatorAgent(UUID id, String name) {
+		super(id, name);
 		dataStore.knownAgents = new LinkedList<AgentIDTriple>();
 		dataStore.currentLeader = new AgentIDTriple();
 		dataStore.myAgentIDTriple = new AgentIDTriple(id, name, null);
 		this.counter = 0;
-		this.scenario = scenario;
+		logger.info("My ID is : " + id);
 	}
 
 	/* (non-Javadoc)
@@ -93,13 +90,12 @@ public class CoordinatorAgent extends HelloAgent {
 	@Override
 	public void execute() {
 		// Messages are processed in this, so all that is done first !
-		// Wonder what happens when I try to move, considering I don't have a location.
 		super.execute();
+		
 		findConnectedNodes();
 		chooseLeader();
 	}
 	
-	@Override
 	protected void outputKnownAgents() {
 		logger.info("I know the following agents because I'm awesome:");
 		for (AgentIDTriple agent : this.dataStore.knownAgents ) {
@@ -119,23 +115,6 @@ public class CoordinatorAgent extends HelloAgent {
 				this.dataStore.knownAgents.add(new AgentIDTriple(agent.getID(), null, )));
 			}
 		}*/
-	}
-
-	/**
-	 * Make a move action, will always be random
-	 */
-	@Override
-	protected void doMove(){
-		// random movement
-		Move2D<Integer> move = new Move2D<Integer>(Random.randomInt(10)-5, Random.randomInt(10)-5);
-		
-		logger.info("Attempting random move: "+ move);
-		
-		try {
-			environment.act(move, getID(), authkey);
-		} catch (ActionHandlingException e) {
-			logger.warn(e);
-		}
 	}
 	
 	private void chooseLeader() {
@@ -181,7 +160,6 @@ public class CoordinatorAgent extends HelloAgent {
 		this.network.sendMessage(msg);
 	}
 	
-	@Override
 	protected boolean knows(NetworkAddress addr) {
 		boolean result = false;
 		for (AgentIDTriple agent : this.dataStore.knownAgents) {

@@ -44,7 +44,7 @@ public class RunHelloWorld {
 					}
 				});
 		
-		Participant p = new CoordinatorAgent(Random.randomUUID(), ("Coordinator"+"0"), new Discrete2DLocation(0, 0), xSize*2, ySize*2, s);
+		Participant p = new CoordinatorAgent(Random.randomUUID(), ("Coordinator"+"0"));
 		s.addParticipant(Scenario.Builder.injectMembers(p));
 		for(int i=1; i<agentCount; i++) {
 			/*Participant*/ p = new HelloAgent(Random.randomUUID(), "helloagent"+i, new Discrete2DLocation(Random.randomInt(xSize), Random.randomInt(ySize)), 10, 10);
