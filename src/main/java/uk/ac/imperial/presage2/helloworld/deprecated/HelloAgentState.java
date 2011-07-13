@@ -1,12 +1,13 @@
 /**
  * 
  */
-package uk.ac.imperial.presage2.helloworld;
+package uk.ac.imperial.presage2.helloworld.deprecated;
 
 import dws04.utils.presage2.contactCards.AgentIDTriple;
 import dws04.utils.presage2.fsm.IsFSMState;
 import uk.ac.imperial.presage2.core.messaging.Input;
 import uk.ac.imperial.presage2.core.messaging.Performative;
+import uk.ac.imperial.presage2.helloworld.NewLeaderMessage;
 
 /**
  * Should really be done as a bunch of classes but ohwell
@@ -14,6 +15,7 @@ import uk.ac.imperial.presage2.core.messaging.Performative;
  * @author dws04
  *
  */
+@Deprecated
 public enum HelloAgentState implements IsFSMState {
 	MOVE_RAND {
 		/**
