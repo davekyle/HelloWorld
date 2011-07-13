@@ -9,6 +9,8 @@ import uk.ac.imperial.presage2.core.simulator.InjectedSimulation;
 import uk.ac.imperial.presage2.core.simulator.Parameter;
 import uk.ac.imperial.presage2.core.simulator.Scenario;
 import uk.ac.imperial.presage2.core.util.random.Random;
+import uk.ac.imperial.presage2.helloworld.participant.CoordinatorAgent;
+import uk.ac.imperial.presage2.helloworld.participant.HelloAgent;
 import uk.ac.imperial.presage2.util.location.Area;
 import uk.ac.imperial.presage2.util.location.Discrete2DLocation;
 

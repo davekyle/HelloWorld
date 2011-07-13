@@ -1,7 +1,7 @@
 /**
  * 
  */
-package uk.ac.imperial.presage2.helloworld;
+package uk.ac.imperial.presage2.helloworld.participant;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,6 +18,10 @@ import uk.ac.imperial.presage2.core.messaging.Input;
 import uk.ac.imperial.presage2.core.messaging.Performative;
 import uk.ac.imperial.presage2.core.network.NetworkAddress;
 import uk.ac.imperial.presage2.core.util.random.Random;
+import uk.ac.imperial.presage2.helloworld.fsm.HelloAgentFSM;
+import uk.ac.imperial.presage2.helloworld.messaging.AgentInfoMessage;
+import uk.ac.imperial.presage2.helloworld.messaging.HelloMessage;
+import uk.ac.imperial.presage2.helloworld.messaging.NewLeaderMessage;
 import uk.ac.imperial.presage2.util.environment.CommunicationRangeService;
 import uk.ac.imperial.presage2.util.location.Discrete2DLocation;
 import uk.ac.imperial.presage2.util.location.HasLocation;

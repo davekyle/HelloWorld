@@ -1,7 +1,7 @@
 /**
  * 
  */
-package uk.ac.imperial.presage2.helloworld;
+package uk.ac.imperial.presage2.helloworld.messaging;
 
 import java.util.List;
 

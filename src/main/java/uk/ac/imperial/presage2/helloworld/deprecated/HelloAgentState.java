@@ -7,7 +7,7 @@ import dws04.utils.presage2.contactCards.AgentIDTriple;
 import dws04.utils.presage2.fsm.IsFSMState;
 import uk.ac.imperial.presage2.core.messaging.Input;
 import uk.ac.imperial.presage2.core.messaging.Performative;
-import uk.ac.imperial.presage2.helloworld.NewLeaderMessage;
+import uk.ac.imperial.presage2.helloworld.messaging.NewLeaderMessage;
 
 /**
  * Should really be done as a bunch of classes but ohwell

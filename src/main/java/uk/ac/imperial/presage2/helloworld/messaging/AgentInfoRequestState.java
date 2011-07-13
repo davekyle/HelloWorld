@@ -1,7 +1,7 @@
 /**
  * 
  */
-package uk.ac.imperial.presage2.helloworld;
+package uk.ac.imperial.presage2.helloworld.messaging;
 
 import uk.ac.imperial.presage2.core.messaging.Input;
 import uk.ac.imperial.presage2.core.messaging.Performative;

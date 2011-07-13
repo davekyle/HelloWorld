@@ -1,7 +1,7 @@
 /**
  * 
  */
-package uk.ac.imperial.presage2.helloworld;
+package uk.ac.imperial.presage2.helloworld.participant;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -21,6 +21,7 @@ import uk.ac.imperial.presage2.core.network.NetworkAddress;
 import uk.ac.imperial.presage2.core.participant.Participant;
 import uk.ac.imperial.presage2.core.simulator.Scenario;
 import uk.ac.imperial.presage2.core.util.random.Random;
+import uk.ac.imperial.presage2.helloworld.messaging.NewLeaderMessage;
 import uk.ac.imperial.presage2.util.location.Move2D;
 import uk.ac.imperial.presage2.util.participant.AbstractParticipant;
 
@@ -54,7 +55,7 @@ public class CoordinatorAgent extends AbstractParticipant {
 
 	private int counter;
 	
-	protected CoordinatorAgent(UUID id, String name) {
+	public CoordinatorAgent(UUID id, String name) {
 		super(id, name);
 		dataStore.knownAgents = new LinkedList<AgentIDTriple>();
 		dataStore.currentLeader = new AgentIDTriple();

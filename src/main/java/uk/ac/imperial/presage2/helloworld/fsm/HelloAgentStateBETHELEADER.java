@@ -1,10 +1,11 @@
 /**
  * 
  */
-package uk.ac.imperial.presage2.helloworld;
+package uk.ac.imperial.presage2.helloworld.fsm;
 
 import uk.ac.imperial.presage2.core.messaging.Input;
 import uk.ac.imperial.presage2.core.messaging.Performative;
+import uk.ac.imperial.presage2.helloworld.messaging.NewLeaderMessage;
 import dws04.utils.presage2.contactCards.AgentIDTriple;
 import dws04.utils.presage2.fsm.IsFSMState;
 
@@ -12,14 +13,14 @@ import dws04.utils.presage2.fsm.IsFSMState;
  * @author dws04
  *
  */
-public class HelloAgentStateFOLLOWTHELEADER extends HelloAgentStateClass {
+public class HelloAgentStateBETHELEADER extends HelloAgentStateClass {
 	
 	private AgentIDTriple myAgentIDTriple;
 
 	/**
 	 * @param myAgentIDTriple
 	 */
-	protected HelloAgentStateFOLLOWTHELEADER(AgentIDTriple myAgentIDTriple) {
+	protected HelloAgentStateBETHELEADER(AgentIDTriple myAgentIDTriple) {
 		super();
 		this.myAgentIDTriple = myAgentIDTriple;
 	}
@@ -39,7 +40,7 @@ public class HelloAgentStateFOLLOWTHELEADER extends HelloAgentStateClass {
 				System.out.println("INFORM - My id : " + getMyAgentIDTriple());
 				if (((NewLeaderMessage)input).getLeader().getAddr().equals(getMyAgentIDTriple().getAddr())) {
 					System.out.println("I'm already in BE_THE_LEADER - My id : " + getMyAgentIDTriple());
-					return new HelloAgentStateBETHELEADER(getMyAgentIDTriple());
+					return this;
 				}
 				else if (((NewLeaderMessage)input).getLeader() == null) {
 					System.out.println("MOVE_RAND - My id : " + getMyAgentIDTriple());

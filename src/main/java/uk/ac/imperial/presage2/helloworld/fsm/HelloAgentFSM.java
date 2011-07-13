@@ -1,9 +1,10 @@
 /**
  * 
  */
-package uk.ac.imperial.presage2.helloworld;
+package uk.ac.imperial.presage2.helloworld.fsm;
 
 import uk.ac.imperial.presage2.core.messaging.Input;
+import uk.ac.imperial.presage2.helloworld.messaging.NewLeaderMessage;
 import dws04.utils.presage2.contactCards.AgentIDTriple;
 import dws04.utils.presage2.fsm.AbstractFSM;
 import dws04.utils.presage2.fsm.IsFSMState;

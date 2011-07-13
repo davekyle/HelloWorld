@@ -1,7 +1,7 @@
 /**
  * 
  */
-package uk.ac.imperial.presage2.helloworld;
+package uk.ac.imperial.presage2.helloworld.messaging;
 
 import dws04.utils.presage2.contactCards.AgentIDTriple;
 import uk.ac.imperial.presage2.core.Time;
