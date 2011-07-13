@@ -12,14 +12,14 @@ import dws04.utils.presage2.fsm.IsFSMState;
  * @author dws04
  *
  */
-public class HelloAgentStateMOVERAND extends HelloAgentStateClass {
+public class HelloAgentStateFOLLOWTHELEADER extends HelloAgentStateClass {
 	
 	private AgentIDTriple myAgentIDTriple;
 
 	/**
 	 * @param myAgentIDTriple
 	 */
-	protected HelloAgentStateMOVERAND(AgentIDTriple myAgentIDTriple) {
+	protected HelloAgentStateFOLLOWTHELEADER(AgentIDTriple myAgentIDTriple) {
 		super();
 		this.myAgentIDTriple = myAgentIDTriple;
 	}
@@ -38,12 +38,12 @@ public class HelloAgentStateMOVERAND extends HelloAgentStateClass {
 			else if (((NewLeaderMessage)input).getPerformative().equals(Performative.INFORM)) {
 				System.out.println("INFORM - My id : " + getMyAgentIDTriple());
 				if (((NewLeaderMessage)input).getLeader().getAddr().equals(getMyAgentIDTriple().getAddr())) {
-					System.out.println("BE_THE_LEADER - My id : " + getMyAgentIDTriple());
+					System.out.println("I'm already in BE_THE_LEADER - My id : " + getMyAgentIDTriple());
 					return new HelloAgentStateBETHELEADER(getMyAgentIDTriple());
 				}
 				else if (((NewLeaderMessage)input).getLeader() == null) {
 					System.out.println("MOVE_RAND - My id : " + getMyAgentIDTriple());
-					return this;
+					return new HelloAgentStateMOVERAND(getMyAgentIDTriple());
 				}
 				else {
 					System.out.println("FOLLOW_THE_LEADER - My id : " + getMyAgentIDTriple());

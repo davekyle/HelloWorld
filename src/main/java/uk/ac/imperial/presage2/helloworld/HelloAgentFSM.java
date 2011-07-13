@@ -18,10 +18,10 @@ public class HelloAgentFSM extends AbstractFSM {
 	private AgentIDTriple myIDTriple;
 
 	public HelloAgentFSM(AgentIDTriple myIDTriple) {
-		super(HelloAgentState.MOVE_RAND);
+		super(new HelloAgentStateMOVERAND(myIDTriple));
 		this.setLeader(myIDTriple);
 		this.setMyIDTriple(myIDTriple);
-		((HelloAgentState)this.getState()).setMyAgentIDTriple(myIDTriple);
+		//Dont need to do this // ((HelloAgentState)this.getState()).setMyAgentIDTriple(myIDTriple);
 	}
 
 	/* (non-Javadoc)
@@ -31,7 +31,7 @@ public class HelloAgentFSM extends AbstractFSM {
 	public void onEnterState(IsFSMState state, Input in) {
 		if (in instanceof NewLeaderMessage) {
 			// Propagate this to other states. FIXME Must be a better way (make states classes, not enum...?)
-			((HelloAgentState)this.getState()).setMyAgentIDTriple(myIDTriple);
+			// shouldnt be needed anymore //((HelloAgentState)this.getState()).setMyAgentIDTriple(myIDTriple);
 			if (isFollowTheLeader(state)) {
 				this.setLeader(((NewLeaderMessage)in).getLeader());
 				logger.info("I should follow " + this.getLeader());
@@ -52,7 +52,7 @@ public class HelloAgentFSM extends AbstractFSM {
 	 * @return
 	 */
 	public static boolean isMoveRand(IsFSMState state) {
-		return state.equals(HelloAgentState.MOVE_RAND);
+		return (state instanceof HelloAgentStateMOVERAND);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class HelloAgentFSM extends AbstractFSM {
 	 * @return
 	 */
 	public static boolean isBeTheLeader(IsFSMState state) {
-		return state.equals(HelloAgentState.BE_THE_LEADER);
+		return (state instanceof HelloAgentStateBETHELEADER);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class HelloAgentFSM extends AbstractFSM {
 	 * @return
 	 */
 	public static boolean isFollowTheLeader(IsFSMState state) {
-		return state.equals(HelloAgentState.FOLLOW_THE_LEADER);
+		return (state instanceof HelloAgentStateFOLLOWTHELEADER);
 	}
 
 	/**
